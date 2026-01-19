@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Convert</title>
+    <link rel="stylesheet" href="currency.css">
+</head>
+<body>
+   <input  id="amount" type="number" placeholder="Enter amount">
+   <select  id="from">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="NGN">NGN</option>
+    <option value="GBP">GBP</option>
+   </select>
+    <select name="" id="To">
+        <option value="NGN">NGN</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+    </select>
+   <button onclick="converterCurrency()">Convert</button>
+   <p id="result"></p>
+   <script>
+    async function converterCurrency() {
+        const amount = document.getElementById("amount").value;
+        const from = document.getElementById("from").value;
+        const To = document.getElementById("To").value;
+        const result = document.getElementById("result");
+        
+        if(!amount){
+            result.textContent = "PLease Enter any Amount.";
+            return;
+        }
+        try{
+            const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${from}`);
+            const data = await res.json();
+            const rate = data.rates[To];
+            const converted = amount * rate;
+            result.textContent = `${amount} ${from} = ${converted.toFixed(2)} ${To}`
+                } catch (error){
+                    result.textContent = "Error fetching exchange rate. Try again.";
+                    console.error(error);
+                }
+    }
+   </script>
+
+</body>
+</html>
